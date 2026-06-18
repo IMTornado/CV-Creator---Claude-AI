@@ -71,6 +71,31 @@ LANGUAGES = [
     ("Turkish", "Elementary Proficiency"),
 ]
 
+# ── NexGen GRC Color Palette ──────────────────────────────────────────────────
+# Dark Navy   #1E3D7A  (Forward Looking)
+# Teal        #28AFA0  (Adequacy)
+# Deep Navy   #1A2D60  (Relevancy)
+# Purple      #6B35A0  (Timeliness)
+# Amber       #F5A520  (Actionability)
+# Crimson     #C0232B  (Center / accent)
+
+C_DARK_NAVY  = RGBColor(0x1E, 0x3D, 0x7A)
+C_TEAL       = RGBColor(0x28, 0xAF, 0xA0)
+C_DEEP_NAVY  = RGBColor(0x1A, 0x2D, 0x60)
+C_PURPLE     = RGBColor(0x6B, 0x35, 0xA0)
+C_AMBER      = RGBColor(0xF5, 0xA5, 0x20)
+C_CRIMSON    = RGBColor(0xC0, 0x23, 0x2B)
+C_WHITE      = RGBColor(0xFF, 0xFF, 0xFF)
+C_LIGHT_GRAY = RGBColor(0xF2, 0xF4, 0xF8)
+
+HEX_DARK_NAVY = "1E3D7A"
+HEX_TEAL      = "28AFA0"
+HEX_DEEP_NAVY = "1A2D60"
+HEX_PURPLE    = "6B35A0"
+HEX_AMBER     = "F5A520"
+HEX_CRIMSON   = "C0232B"
+HEX_LIGHT_BG  = "F2F4F8"
+
 # ── DOCX GENERATION ────────────────────────────────────────────────────────────
 
 def set_cell_bg(cell, color_hex):
@@ -82,9 +107,9 @@ def set_cell_bg(cell, color_hex):
     shd.set(qn('w:fill'), color_hex)
     tcPr.append(shd)
 
-def add_hrule(doc):
+def add_colored_hrule(doc, color_hex="28AFA0"):
     p = doc.add_paragraph()
-    p.paragraph_format.space_before = Pt(2)
+    p.paragraph_format.space_before = Pt(1)
     p.paragraph_format.space_after = Pt(2)
     pPr = p._p.get_or_add_pPr()
     pBdr = OxmlElement('w:pBdr')
@@ -92,96 +117,103 @@ def add_hrule(doc):
     bottom.set(qn('w:val'), 'single')
     bottom.set(qn('w:sz'), '6')
     bottom.set(qn('w:space'), '1')
-    bottom.set(qn('w:color'), '2C5282')
+    bottom.set(qn('w:color'), color_hex)
     pBdr.append(bottom)
     pPr.append(pBdr)
 
-def section_heading(doc, text):
+def section_heading(doc, text, rule_color=HEX_TEAL):
     p = doc.add_paragraph()
     p.paragraph_format.space_before = Pt(10)
-    p.paragraph_format.space_after = Pt(2)
+    p.paragraph_format.space_after = Pt(1)
     run = p.add_run(text.upper())
     run.bold = True
     run.font.size = Pt(11)
-    run.font.color.rgb = RGBColor(0x2C, 0x52, 0x82)
-    add_hrule(doc)
+    run.font.color.rgb = C_DARK_NAVY
+    add_colored_hrule(doc, rule_color)
 
 def build_docx(path):
     doc = Document()
 
-    # Page margins
     for section in doc.sections:
         section.top_margin = Cm(1.5)
         section.bottom_margin = Cm(1.5)
         section.left_margin = Cm(2)
         section.right_margin = Cm(2)
 
-    # Default style
     style = doc.styles['Normal']
     style.font.name = 'Calibri'
     style.font.size = Pt(10)
 
-    # ── Header ──
+    # ── Header band ──
+    # Name
     p = doc.add_paragraph()
     p.alignment = WD_ALIGN_PARAGRAPH.CENTER
     p.paragraph_format.space_after = Pt(2)
     run = p.add_run(NAME)
     run.bold = True
     run.font.size = Pt(22)
-    run.font.color.rgb = RGBColor(0x1A, 0x36, 0x5C)
+    run.font.color.rgb = C_DEEP_NAVY
 
+    # Title with teal color
     p2 = doc.add_paragraph()
     p2.alignment = WD_ALIGN_PARAGRAPH.CENTER
     p2.paragraph_format.space_after = Pt(4)
     run2 = p2.add_run(TITLE)
     run2.font.size = Pt(12)
-    run2.font.color.rgb = RGBColor(0x2C, 0x52, 0x82)
+    run2.font.color.rgb = C_TEAL
     run2.bold = True
 
+    # Contact line
     p3 = doc.add_paragraph()
     p3.alignment = WD_ALIGN_PARAGRAPH.CENTER
     p3.paragraph_format.space_after = Pt(6)
-    contact_str = "  |  ".join(CONTACT)
-    run3 = p3.add_run(contact_str)
+    run3 = p3.add_run("  |  ".join(CONTACT))
     run3.font.size = Pt(9)
     run3.font.color.rgb = RGBColor(0x44, 0x44, 0x44)
 
-    add_hrule(doc)
+    # Thick double rule: amber then teal
+    add_colored_hrule(doc, HEX_AMBER)
+    add_colored_hrule(doc, HEX_TEAL)
 
     # ── Summary ──
-    section_heading(doc, "Professional Summary")
+    section_heading(doc, "Professional Summary", HEX_TEAL)
     p = doc.add_paragraph(SUMMARY)
     p.paragraph_format.space_after = Pt(4)
 
-    # ── Skills ──
-    section_heading(doc, "Core Skills")
+    # ── Skills (pill-style row with purple heading) ──
+    section_heading(doc, "Core Skills", HEX_PURPLE)
     p = doc.add_paragraph(SKILLS)
     p.paragraph_format.space_after = Pt(4)
 
     # ── Experience ──
-    section_heading(doc, "Work Experience")
+    section_heading(doc, "Work Experience", HEX_DARK_NAVY)
     for job in EXPERIENCE:
+        # Company name in dark navy
         p = doc.add_paragraph()
         p.paragraph_format.space_before = Pt(6)
         p.paragraph_format.space_after = Pt(0)
         r = p.add_run(job["company"])
         r.bold = True
         r.font.size = Pt(11)
+        r.font.color.rgb = C_DARK_NAVY
 
+        # Job title in purple
         p2 = doc.add_paragraph()
         p2.paragraph_format.space_before = Pt(0)
         p2.paragraph_format.space_after = Pt(0)
         r2 = p2.add_run(job["title"])
         r2.bold = True
         r2.font.size = Pt(10)
+        r2.font.color.rgb = C_PURPLE
 
+        # Dates in amber
         p3 = doc.add_paragraph()
         p3.paragraph_format.space_before = Pt(0)
         p3.paragraph_format.space_after = Pt(4)
         r3 = p3.add_run(f"{job['dates']}  |  {job['location']}")
         r3.italic = True
         r3.font.size = Pt(9)
-        r3.font.color.rgb = RGBColor(0x66, 0x66, 0x66)
+        r3.font.color.rgb = C_AMBER
 
         for bullet in job["bullets"]:
             p = doc.add_paragraph(style='List Bullet')
@@ -190,14 +222,15 @@ def build_docx(path):
             run = p.add_run(bullet)
             run.font.size = Pt(10)
 
-    # ── Education ──
-    section_heading(doc, "Education")
+    # ── Education (teal heading) ──
+    section_heading(doc, "Education", HEX_TEAL)
     for degree, uni, year in EDUCATION:
         p = doc.add_paragraph()
         p.paragraph_format.space_before = Pt(4)
         p.paragraph_format.space_after = Pt(0)
         r = p.add_run(degree)
         r.bold = True
+        r.font.color.rgb = C_DEEP_NAVY
         p2 = doc.add_paragraph()
         p2.paragraph_format.space_before = Pt(0)
         p2.paragraph_format.space_after = Pt(2)
@@ -206,24 +239,27 @@ def build_docx(path):
         r2.italic = True
         r2.font.color.rgb = RGBColor(0x55, 0x55, 0x55)
 
-    # ── Certifications ──
-    section_heading(doc, "Certifications")
+    # ── Certifications table (dark navy header) ──
+    section_heading(doc, "Certifications", HEX_CRIMSON)
     table = doc.add_table(rows=1, cols=2)
     table.style = 'Table Grid'
     hdr = table.rows[0].cells
     hdr[0].text = "Certification"
     hdr[1].text = "Issuing Body"
     for cell in hdr:
-        set_cell_bg(cell, "2C5282")
+        set_cell_bg(cell, HEX_DEEP_NAVY)
         for para in cell.paragraphs:
             for run in para.runs:
                 run.bold = True
-                run.font.color.rgb = RGBColor(0xFF, 0xFF, 0xFF)
+                run.font.color.rgb = C_WHITE
                 run.font.size = Pt(10)
-    for cert, issuer in CERTIFICATIONS:
+    for i, (cert, issuer) in enumerate(CERTIFICATIONS):
         row = table.add_row().cells
         row[0].text = cert
         row[1].text = issuer
+        bg = HEX_LIGHT_BG if i % 2 == 0 else "FFFFFF"
+        set_cell_bg(row[0], bg)
+        set_cell_bg(row[1], bg)
         for cell in row:
             for para in cell.paragraphs:
                 for run in para.runs:
@@ -232,12 +268,13 @@ def build_docx(path):
     doc.add_paragraph()
 
     # ── Languages ──
-    section_heading(doc, "Languages")
+    section_heading(doc, "Languages", HEX_AMBER)
     for lang, prof in LANGUAGES:
         p = doc.add_paragraph()
         p.paragraph_format.space_after = Pt(2)
         r1 = p.add_run(f"{lang}: ")
         r1.bold = True
+        r1.font.color.rgb = C_DARK_NAVY
         p.add_run(prof)
 
     doc.save(path)
@@ -251,32 +288,147 @@ HTML_TEMPLATE = """<!DOCTYPE html>
 <head>
 <meta charset="UTF-8"/>
 <style>
+  /* NexGen GRC Palette
+     Dark Navy  #1E3D7A  Forward Looking
+     Teal       #28AFA0  Adequacy
+     Deep Navy  #1A2D60  Relevancy
+     Purple     #6B35A0  Timeliness
+     Amber      #F5A520  Actionability
+     Crimson    #C0232B  Center
+  */
   @page {{ margin: 1.5cm 2cm; }}
   * {{ box-sizing: border-box; margin: 0; padding: 0; }}
-  body {{ font-family: Calibri, Arial, sans-serif; font-size: 10pt; color: #222; line-height: 1.4; }}
-  .header {{ text-align: center; border-bottom: 3px solid #2C5282; padding-bottom: 8px; margin-bottom: 10px; }}
-  .header h1 {{ font-size: 22pt; color: #1A365C; letter-spacing: 1px; margin-bottom: 2px; }}
-  .header .title {{ font-size: 12pt; color: #2C5282; font-weight: bold; margin-bottom: 4px; }}
-  .header .contact {{ font-size: 9pt; color: #444; }}
-  .section-title {{ font-size: 11pt; font-weight: bold; color: #2C5282; text-transform: uppercase;
-                    letter-spacing: 0.5px; border-bottom: 1.5px solid #2C5282;
-                    margin-top: 12px; margin-bottom: 5px; padding-bottom: 2px; }}
-  p {{ margin-bottom: 4px; }}
-  .skills {{ margin-bottom: 4px; }}
-  .job-company {{ font-size: 11pt; font-weight: bold; margin-top: 8px; margin-bottom: 1px; }}
-  .job-title {{ font-weight: bold; font-size: 10pt; margin-bottom: 1px; }}
-  .job-meta {{ font-size: 9pt; color: #666; font-style: italic; margin-bottom: 4px; }}
-  ul {{ margin-left: 18px; margin-bottom: 4px; }}
-  li {{ margin-bottom: 3px; }}
-  .edu-entry {{ margin-bottom: 6px; }}
-  .edu-degree {{ font-weight: bold; }}
-  .edu-uni {{ font-size: 9pt; color: #555; font-style: italic; }}
-  table {{ width: 100%; border-collapse: collapse; margin-top: 4px; font-size: 10pt; }}
-  th {{ background: #2C5282; color: #fff; font-weight: bold; padding: 5px 8px; text-align: left; }}
-  td {{ border: 1px solid #ccc; padding: 4px 8px; }}
-  tr:nth-child(even) td {{ background: #f5f8ff; }}
-  .lang-row {{ display: inline-block; margin-right: 20px; margin-bottom: 3px; }}
-  .lang-name {{ font-weight: bold; }}
+  body {{ font-family: Calibri, Arial, sans-serif; font-size: 10pt; color: #222; line-height: 1.45; }}
+
+  /* ── Header ── */
+  .header {{
+    border-top: 4px solid #F5A520;
+    border-bottom: 3px solid #28AFA0;
+    padding: 10px 0 8px 0;
+    text-align: center;
+    margin-bottom: 12px;
+  }}
+  .header h1 {{
+    font-size: 22pt;
+    color: #1A2D60;
+    letter-spacing: 2px;
+    margin-bottom: 3px;
+    text-transform: uppercase;
+  }}
+  .header .title {{
+    font-size: 12pt;
+    color: #28AFA0;
+    font-weight: bold;
+    margin-bottom: 5px;
+  }}
+  .header .contact {{
+    font-size: 9pt;
+    color: #555;
+  }}
+
+  /* ── Section headings ── */
+  .section-title {{
+    font-size: 11pt;
+    font-weight: bold;
+    color: #1E3D7A;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    margin-top: 14px;
+    margin-bottom: 5px;
+    padding-bottom: 3px;
+    border-bottom: 2px solid #28AFA0;
+  }}
+  .section-title.purple  {{ border-color: #6B35A0; }}
+  .section-title.navy    {{ border-color: #1A2D60; }}
+  .section-title.crimson {{ border-color: #C0232B; }}
+  .section-title.amber   {{ border-color: #F5A520; }}
+
+  /* ── Summary ── */
+  .summary {{ margin-bottom: 4px; }}
+
+  /* ── Skills ── */
+  .skills {{
+    background: #F2F4F8;
+    border-left: 4px solid #6B35A0;
+    padding: 6px 10px;
+    margin-bottom: 4px;
+    font-size: 9.5pt;
+    color: #333;
+  }}
+
+  /* ── Experience ── */
+  .job {{ margin-bottom: 10px; }}
+  .job-company {{
+    font-size: 11pt;
+    font-weight: bold;
+    color: #1E3D7A;
+    margin-top: 8px;
+    margin-bottom: 1px;
+  }}
+  .job-title {{
+    font-weight: bold;
+    font-size: 10pt;
+    color: #6B35A0;
+    margin-bottom: 1px;
+  }}
+  .job-meta {{
+    font-size: 9pt;
+    color: #F5A520;
+    font-style: italic;
+    font-weight: bold;
+    margin-bottom: 5px;
+  }}
+  ul {{
+    margin-left: 18px;
+    margin-bottom: 4px;
+  }}
+  li {{
+    margin-bottom: 3px;
+    padding-left: 2px;
+  }}
+  li::marker {{ color: #28AFA0; }}
+
+  /* ── Education ── */
+  .edu-entry {{ margin-bottom: 7px; }}
+  .edu-degree {{ font-weight: bold; color: #1A2D60; }}
+  .edu-uni {{ font-size: 9pt; color: #666; font-style: italic; }}
+
+  /* ── Certifications table ── */
+  table {{
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 5px;
+    font-size: 10pt;
+  }}
+  th {{
+    background: #1A2D60;
+    color: #fff;
+    font-weight: bold;
+    padding: 6px 10px;
+    text-align: left;
+  }}
+  td {{
+    border: 1px solid #ddd;
+    padding: 5px 10px;
+  }}
+  tr:nth-child(even) td {{ background: #F2F4F8; }}
+  tr:nth-child(odd)  td {{ background: #fff; }}
+
+  /* ── Languages ── */
+  .lang-row {{ margin-bottom: 3px; }}
+  .lang-name {{ font-weight: bold; color: #1E3D7A; }}
+
+  /* ── Footer stripe ── */
+  .footer-stripe {{
+    margin-top: 16px;
+    height: 4px;
+    background: linear-gradient(to right,
+      #1E3D7A 0%, #1E3D7A 20%,
+      #28AFA0 20%, #28AFA0 40%,
+      #6B35A0 40%, #6B35A0 60%,
+      #F5A520 60%, #F5A520 80%,
+      #C0232B 80%, #C0232B 100%);
+  }}
 </style>
 </head>
 <body>
@@ -288,25 +440,27 @@ HTML_TEMPLATE = """<!DOCTYPE html>
 </div>
 
 <div class="section-title">Professional Summary</div>
-<p>{summary}</p>
+<p class="summary">{summary}</p>
 
-<div class="section-title">Core Skills</div>
-<p class="skills">{skills}</p>
+<div class="section-title purple">Core Skills</div>
+<div class="skills">{skills}</div>
 
-<div class="section-title">Work Experience</div>
+<div class="section-title navy">Work Experience</div>
 {experience}
 
 <div class="section-title">Education</div>
 {education}
 
-<div class="section-title">Certifications</div>
+<div class="section-title crimson">Certifications</div>
 <table>
   <tr><th>Certification</th><th>Issuing Body</th></tr>
   {cert_rows}
 </table>
 
-<div class="section-title">Languages</div>
-<p>{languages}</p>
+<div class="section-title amber">Languages</div>
+{languages}
+
+<div class="footer-stripe"></div>
 
 </body>
 </html>"""
@@ -324,10 +478,12 @@ def build_html():
     for job in EXPERIENCE:
         bullets = "".join(f"<li>{b}</li>" for b in job["bullets"])
         exp_html += f"""
-        <div class="job-company">{job['company']}</div>
-        <div class="job-title">{job['title']}</div>
-        <div class="job-meta">{job['dates']}  |  {job['location']}</div>
-        <ul>{bullets}</ul>
+        <div class="job">
+          <div class="job-company">{job['company']}</div>
+          <div class="job-title">{job['title']}</div>
+          <div class="job-meta">{job['dates']}  |  {job['location']}</div>
+          <ul>{bullets}</ul>
+        </div>
         """
 
     edu_html = ""
@@ -340,7 +496,11 @@ def build_html():
         """
 
     cert_rows = "".join(f"<tr><td>{c}</td><td>{i}</td></tr>" for c, i in CERTIFICATIONS)
-    lang_str = "  |  ".join(f"<span class='lang-name'>{l}</span>: {p}" for l, p in LANGUAGES)
+
+    lang_html = "".join(
+        f'<div class="lang-row"><span class="lang-name">{l}:</span> {p}</div>'
+        for l, p in LANGUAGES
+    )
 
     return HTML_TEMPLATE.format(
         name=NAME,
@@ -351,7 +511,7 @@ def build_html():
         experience=exp_html,
         education=edu_html,
         cert_rows=cert_rows,
-        languages=lang_str,
+        languages=lang_html,
     )
 
 

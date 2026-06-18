@@ -3,32 +3,147 @@
 <head>
 <meta charset="UTF-8"/>
 <style>
+  /* NexGen GRC Palette
+     Dark Navy  #1E3D7A  Forward Looking
+     Teal       #28AFA0  Adequacy
+     Deep Navy  #1A2D60  Relevancy
+     Purple     #6B35A0  Timeliness
+     Amber      #F5A520  Actionability
+     Crimson    #C0232B  Center
+  */
   @page { margin: 1.5cm 2cm; }
   * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { font-family: Calibri, Arial, sans-serif; font-size: 10pt; color: #222; line-height: 1.4; }
-  .header { text-align: center; border-bottom: 3px solid #2C5282; padding-bottom: 8px; margin-bottom: 10px; }
-  .header h1 { font-size: 22pt; color: #1A365C; letter-spacing: 1px; margin-bottom: 2px; }
-  .header .title { font-size: 12pt; color: #2C5282; font-weight: bold; margin-bottom: 4px; }
-  .header .contact { font-size: 9pt; color: #444; }
-  .section-title { font-size: 11pt; font-weight: bold; color: #2C5282; text-transform: uppercase;
-                    letter-spacing: 0.5px; border-bottom: 1.5px solid #2C5282;
-                    margin-top: 12px; margin-bottom: 5px; padding-bottom: 2px; }
-  p { margin-bottom: 4px; }
-  .skills { margin-bottom: 4px; }
-  .job-company { font-size: 11pt; font-weight: bold; margin-top: 8px; margin-bottom: 1px; }
-  .job-title { font-weight: bold; font-size: 10pt; margin-bottom: 1px; }
-  .job-meta { font-size: 9pt; color: #666; font-style: italic; margin-bottom: 4px; }
-  ul { margin-left: 18px; margin-bottom: 4px; }
-  li { margin-bottom: 3px; }
-  .edu-entry { margin-bottom: 6px; }
-  .edu-degree { font-weight: bold; }
-  .edu-uni { font-size: 9pt; color: #555; font-style: italic; }
-  table { width: 100%; border-collapse: collapse; margin-top: 4px; font-size: 10pt; }
-  th { background: #2C5282; color: #fff; font-weight: bold; padding: 5px 8px; text-align: left; }
-  td { border: 1px solid #ccc; padding: 4px 8px; }
-  tr:nth-child(even) td { background: #f5f8ff; }
-  .lang-row { display: inline-block; margin-right: 20px; margin-bottom: 3px; }
-  .lang-name { font-weight: bold; }
+  body { font-family: Calibri, Arial, sans-serif; font-size: 10pt; color: #222; line-height: 1.45; }
+
+  /* ── Header ── */
+  .header {
+    border-top: 4px solid #F5A520;
+    border-bottom: 3px solid #28AFA0;
+    padding: 10px 0 8px 0;
+    text-align: center;
+    margin-bottom: 12px;
+  }
+  .header h1 {
+    font-size: 22pt;
+    color: #1A2D60;
+    letter-spacing: 2px;
+    margin-bottom: 3px;
+    text-transform: uppercase;
+  }
+  .header .title {
+    font-size: 12pt;
+    color: #28AFA0;
+    font-weight: bold;
+    margin-bottom: 5px;
+  }
+  .header .contact {
+    font-size: 9pt;
+    color: #555;
+  }
+
+  /* ── Section headings ── */
+  .section-title {
+    font-size: 11pt;
+    font-weight: bold;
+    color: #1E3D7A;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    margin-top: 14px;
+    margin-bottom: 5px;
+    padding-bottom: 3px;
+    border-bottom: 2px solid #28AFA0;
+  }
+  .section-title.purple  { border-color: #6B35A0; }
+  .section-title.navy    { border-color: #1A2D60; }
+  .section-title.crimson { border-color: #C0232B; }
+  .section-title.amber   { border-color: #F5A520; }
+
+  /* ── Summary ── */
+  .summary { margin-bottom: 4px; }
+
+  /* ── Skills ── */
+  .skills {
+    background: #F2F4F8;
+    border-left: 4px solid #6B35A0;
+    padding: 6px 10px;
+    margin-bottom: 4px;
+    font-size: 9.5pt;
+    color: #333;
+  }
+
+  /* ── Experience ── */
+  .job { margin-bottom: 10px; }
+  .job-company {
+    font-size: 11pt;
+    font-weight: bold;
+    color: #1E3D7A;
+    margin-top: 8px;
+    margin-bottom: 1px;
+  }
+  .job-title {
+    font-weight: bold;
+    font-size: 10pt;
+    color: #6B35A0;
+    margin-bottom: 1px;
+  }
+  .job-meta {
+    font-size: 9pt;
+    color: #F5A520;
+    font-style: italic;
+    font-weight: bold;
+    margin-bottom: 5px;
+  }
+  ul {
+    margin-left: 18px;
+    margin-bottom: 4px;
+  }
+  li {
+    margin-bottom: 3px;
+    padding-left: 2px;
+  }
+  li::marker { color: #28AFA0; }
+
+  /* ── Education ── */
+  .edu-entry { margin-bottom: 7px; }
+  .edu-degree { font-weight: bold; color: #1A2D60; }
+  .edu-uni { font-size: 9pt; color: #666; font-style: italic; }
+
+  /* ── Certifications table ── */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 5px;
+    font-size: 10pt;
+  }
+  th {
+    background: #1A2D60;
+    color: #fff;
+    font-weight: bold;
+    padding: 6px 10px;
+    text-align: left;
+  }
+  td {
+    border: 1px solid #ddd;
+    padding: 5px 10px;
+  }
+  tr:nth-child(even) td { background: #F2F4F8; }
+  tr:nth-child(odd)  td { background: #fff; }
+
+  /* ── Languages ── */
+  .lang-row { margin-bottom: 3px; }
+  .lang-name { font-weight: bold; color: #1E3D7A; }
+
+  /* ── Footer stripe ── */
+  .footer-stripe {
+    margin-top: 16px;
+    height: 4px;
+    background: linear-gradient(to right,
+      #1E3D7A 0%, #1E3D7A 20%,
+      #28AFA0 20%, #28AFA0 40%,
+      #6B35A0 40%, #6B35A0 60%,
+      #F5A520 60%, #F5A520 80%,
+      #C0232B 80%, #C0232B 100%);
+  }
 </style>
 </head>
 <body>
@@ -40,17 +155,19 @@
 </div>
 
 <div class="section-title">Professional Summary</div>
-<p>GRC-focused Information Security Engineer with 2+ years of experience delivering ISO 27001:2022 audit engagements, ISMS implementations, and compliance assessments across local and international organizations. Conducted end-to-end internal and external audits for 5 organizations including Kualitatem, Virtual Force, and international clients, driving ISMS certification and compliance outcomes. Certified ISO 27001:2022 Lead Auditor (CQI|IRCA & Mastermind Assurance) with hands-on expertise in SAMA CSF, SOC 2, GDPR, Vanta, and Sahl.</p>
+<p class="summary">GRC-focused Information Security Engineer with 2+ years of experience delivering ISO 27001:2022 audit engagements, ISMS implementations, and compliance assessments across local and international organizations. Conducted end-to-end internal and external audits for 5 organizations including Kualitatem, Virtual Force, and international clients, driving ISMS certification and compliance outcomes. Certified ISO 27001:2022 Lead Auditor (CQI|IRCA & Mastermind Assurance) with hands-on expertise in SAMA CSF, SOC 2, GDPR, Vanta, and Sahl.</p>
 
-<div class="section-title">Core Skills</div>
-<p class="skills">ISO 27001:2022  |  Internal Audit  |  External Audit  |  ISMS Implementation  |  SAMA CSF  |  SOC 2  |  GDPR  |  Risk Assessment  |  Risk Treatment Plan  |  Gap Analysis  |  Statement of Applicability (SoA)  |  Non-Conformity Reporting  |  Audit Planning & Execution  |  Compliance Reporting  |  Vanta  |  Sahl  |  Top Management Presentations</p>
+<div class="section-title purple">Core Skills</div>
+<div class="skills">ISO 27001:2022  |  Internal Audit  |  External Audit  |  ISMS Implementation  |  SAMA CSF  |  SOC 2  |  GDPR  |  Risk Assessment  |  Risk Treatment Plan  |  Gap Analysis  |  Statement of Applicability (SoA)  |  Non-Conformity Reporting  |  Audit Planning & Execution  |  Compliance Reporting  |  Vanta  |  Sahl  |  Top Management Presentations</div>
 
-<div class="section-title">Work Experience</div>
+<div class="section-title navy">Work Experience</div>
 
-        <div class="job-company">Kualitatem Inc.</div>
-        <div class="job-title">Information Security Engineer – Information Security Department</div>
-        <div class="job-meta">December 2023 – Present  |  Lahore, Pakistan</div>
-        <ul><li>Strengthened Kualitatem's ISO 27001:2022 compliance posture, as measured by a successful external certification audit with zero major non-conformities, by leading end-to-end internal audit activities covering planning, evidence collection, controls assessment, and non-conformity reporting to top management.</li><li>Maintained ISO 27001:2022 certification for Virtual Force, as measured by a passed surveillance audit, by executing a full audit lifecycle including scope review, controls re-evaluation, and verification of previously identified non-conformity closures.</li><li>Achieved ISO 27001:2022 certification readiness for 3 clients (2 local, 1 international), as measured by successful audit outcomes across all engagements, by delivering structured end-to-end internal and external audit programs, identifying control gaps, and presenting prioritized findings to client management.</li><li>Achieved ISO 27001:2022 certification for a client from ground zero, as measured by full certification attainment, by leading end-to-end ISMS implementation including risk assessment, SoA development, control design, and pre-certification audit preparation.</li><li>Renewed SOC 2 certification for Kualitatem, as measured by continued compliance with all Trust Service Criteria, by coordinating cross-functional evidence collection via Vanta, liaising with external auditors, and remediating identified control gaps ahead of assessment.</li><li>Enhanced client compliance posture against SAMA CSF, as measured by detailed gap assessment reports delivered to senior management, by conducting structured stakeholder interviews, analyzing control deficiencies via Sahl, and producing prioritized remediation roadmaps.</li><li>Supported organization-wide GDPR compliance program, as measured by documented data processing assessments, by collaborating with the Internal Audit team to review data handling practices and implement corrective control measures.</li></ul>
+        <div class="job">
+          <div class="job-company">Kualitatem Inc.</div>
+          <div class="job-title">Information Security Engineer – Information Security Department</div>
+          <div class="job-meta">December 2023 – Present  |  Lahore, Pakistan</div>
+          <ul><li>Strengthened Kualitatem's ISO 27001:2022 compliance posture, as measured by a successful external certification audit with zero major non-conformities, by leading end-to-end internal audit activities covering planning, evidence collection, controls assessment, and non-conformity reporting to top management.</li><li>Maintained ISO 27001:2022 certification for Virtual Force, as measured by a passed surveillance audit, by executing a full audit lifecycle including scope review, controls re-evaluation, and verification of previously identified non-conformity closures.</li><li>Achieved ISO 27001:2022 certification readiness for 3 clients (2 local, 1 international), as measured by successful audit outcomes across all engagements, by delivering structured end-to-end internal and external audit programs, identifying control gaps, and presenting prioritized findings to client management.</li><li>Achieved ISO 27001:2022 certification for a client from ground zero, as measured by full certification attainment, by leading end-to-end ISMS implementation including risk assessment, SoA development, control design, and pre-certification audit preparation.</li><li>Renewed SOC 2 certification for Kualitatem, as measured by continued compliance with all Trust Service Criteria, by coordinating cross-functional evidence collection via Vanta, liaising with external auditors, and remediating identified control gaps ahead of assessment.</li><li>Enhanced client compliance posture against SAMA CSF, as measured by detailed gap assessment reports delivered to senior management, by conducting structured stakeholder interviews, analyzing control deficiencies via Sahl, and producing prioritized remediation roadmaps.</li><li>Supported organization-wide GDPR compliance program, as measured by documented data processing assessments, by collaborating with the Internal Audit team to review data handling practices and implement corrective control measures.</li></ul>
+        </div>
         
 
 <div class="section-title">Education</div>
@@ -66,14 +183,16 @@
         </div>
         
 
-<div class="section-title">Certifications</div>
+<div class="section-title crimson">Certifications</div>
 <table>
   <tr><th>Certification</th><th>Issuing Body</th></tr>
   <tr><td>ISO 27001:2022 Lead Auditor</td><td>CQI|IRCA</td></tr><tr><td>ISO/IEC 27001:2022 Lead Auditor</td><td>Mastermind Assurance</td></tr><tr><td>ISO 27001:2022 INFOSEC Associate</td><td>SkillFront</td></tr><tr><td>eJPT – Junior Penetration Tester</td><td>INE eLearnSecurity</td></tr>
 </table>
 
-<div class="section-title">Languages</div>
-<p><span class='lang-name'>English</span>: Full Professional Proficiency  |  <span class='lang-name'>Urdu</span>: Native / Bilingual Proficiency  |  <span class='lang-name'>Turkish</span>: Elementary Proficiency</p>
+<div class="section-title amber">Languages</div>
+<div class="lang-row"><span class="lang-name">English:</span> Full Professional Proficiency</div><div class="lang-row"><span class="lang-name">Urdu:</span> Native / Bilingual Proficiency</div><div class="lang-row"><span class="lang-name">Turkish:</span> Elementary Proficiency</div>
+
+<div class="footer-stripe"></div>
 
 </body>
 </html>
